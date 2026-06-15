@@ -1,6 +1,16 @@
 const CONFIG_KEY = "veiling-kijkdagen-supabase";
+const PUBLIC_SUPABASE_URL = "https://lxjjdzxqxrcjhblytcuf.supabase.co";
+const PUBLIC_SUPABASE_KEY = "sb_publishable_9_EslvVxFcKLbo12YCZXIg_wOuz-ajX";
+
+function getEmbeddedConfig() {
+  if (!PUBLIC_SUPABASE_URL || !PUBLIC_SUPABASE_KEY) return {};
+  return { url: PUBLIC_SUPABASE_URL, key: PUBLIC_SUPABASE_KEY };
+}
 
 function getStoredConfig() {
+  const embedded = getEmbeddedConfig();
+  if (embedded.url && embedded.key) return embedded;
+
   try {
     return JSON.parse(localStorage.getItem(CONFIG_KEY)) || {};
   } catch {
@@ -21,6 +31,12 @@ function getSupabaseClient() {
 function wireConfigForm(onSaved) {
   const form = document.querySelector("#configForm");
   if (!form) return;
+
+  const embedded = getEmbeddedConfig();
+  if (embedded.url && embedded.key) {
+    form.closest(".config-panel")?.classList.add("hidden");
+    return;
+  }
 
   const stored = getStoredConfig();
   form.querySelector("#supabaseUrl").value = stored.url || "";
