@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Veiling Kijkdagen</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="styles.css?v=3">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Veiling Kijkdagen home">
+        <span class="brand-mark">VK</span>
+        <span>Veiling Kijkdagen</span>
+      </a>
+      <nav>
+        <a href="admin.html">Admin</a>
+      </nav>
+    </header>
+
+    <main class="shell">
+      <section class="control-band" aria-label="Filters">
+        <div>
+          <p class="eyebrow">Kijkdagen per week</p>
+          <h1>Vind veilinghuizen met kijkdagen in jouw gekozen week</h1>
+        </div>
+        <label class="week-picker">
+          <span>Week</span>
+          <input id="weekInput" type="week">
+        </label>
+      </section>
+
+      <section id="setupNotice" class="notice hidden">
+        <strong>Supabase nog niet ingesteld.</strong>
+        Vul je project-url en anon key in via de instellingen hieronder.
+      </section>
+
+      <section class="config-panel" aria-label="Supabase instellingen">
+        <details>
+          <summary>Supabase instellingen</summary>
+          <form id="configForm" class="config-grid">
+            <label>
+              <span>Project URL</span>
+              <input id="supabaseUrl" type="url" placeholder="https://jouw-project.supabase.co">
+            </label>
+            <label>
+              <span>Anon key</span>
+              <input id="supabaseKey" type="password" placeholder="eyJ...">
+            </label>
+            <button type="submit">Opslaan</button>
+          </form>
+        </details>
+      </section>
+
+      <section class="content-grid">
+        <div class="map-wrap">
+          <div id="map" aria-label="Kaart met veilinghuizen"></div>
+        </div>
+
+        <aside class="list-panel" aria-label="Lijst met veilinghuizen">
+          <div class="list-head">
+            <h2>Veilinghuizen</h2>
+            <span id="resultCount">0</span>
+          </div>
+          <div id="houseList" class="house-list"></div>
+        </aside>
+      </section>
+    </main>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="shared.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

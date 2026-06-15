@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin | Veiling Kijkdagen</title>
+    <link rel="stylesheet" href="styles.css?v=3">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Veiling Kijkdagen home">
+        <span class="brand-mark">VK</span>
+        <span>Veiling Kijkdagen</span>
+      </a>
+      <nav>
+        <a href="index.html">Homepage</a>
+      </nav>
+    </header>
+
+    <main class="shell admin-shell">
+      <section class="control-band">
+        <div>
+          <p class="eyebrow">Handmatige invoer</p>
+          <h1>Admin voor veilinghuizen, veilingen en kijkdagen</h1>
+        </div>
+      </section>
+
+      <section id="setupNotice" class="notice hidden">
+        <strong>Supabase nog niet ingesteld.</strong>
+        Gebruik dezelfde instellingen als op de homepage.
+      </section>
+
+      <section class="config-panel" aria-label="Supabase instellingen">
+        <details open>
+          <summary>Supabase instellingen</summary>
+          <form id="configForm" class="config-grid">
+            <label>
+              <span>Project URL</span>
+              <input id="supabaseUrl" type="url" placeholder="https://jouw-project.supabase.co">
+            </label>
+            <label>
+              <span>Anon key</span>
+              <input id="supabaseKey" type="password" placeholder="eyJ...">
+            </label>
+            <button type="submit">Opslaan</button>
+          </form>
+        </details>
+      </section>
+
+      <section class="admin-grid">
+        <form id="houseForm" class="admin-card">
+          <h2>Veilinghuis</h2>
+          <label><span>Naam</span><input name="name" required></label>
+          <label><span>Adres</span><input name="address"></label>
+          <label><span>Stad</span><input name="city" required></label>
+          <label><span>Website</span><input name="website" type="url"></label>
+          <label><span>Afbeelding URL</span><input name="image_url" type="url" placeholder="https://..."></label>
+          <div class="split">
+            <label><span>Latitude</span><input name="latitude" type="number" step="any" required></label>
+            <label><span>Longitude</span><input name="longitude" type="number" step="any" required></label>
+          </div>
+          <button type="submit">Veilinghuis toevoegen</button>
+        </form>
+
+        <form id="auctionForm" class="admin-card">
+          <h2>Veiling</h2>
+          <label><span>Veilinghuis</span><select name="auction_house_id" required></select></label>
+          <label><span>Titel</span><input name="title" required></label>
+          <label><span>Startdatum</span><input name="starts_at" type="datetime-local"></label>
+          <label><span>Einddatum</span><input name="ends_at" type="datetime-local"></label>
+          <label><span>URL</span><input name="url" type="url"></label>
+          <label><span>Afbeelding URL</span><input name="image_url" type="url" placeholder="https://..."></label>
+          <button type="submit">Veiling toevoegen</button>
+        </form>
+
+        <form id="viewingDayForm" class="admin-card">
+          <h2>Kijkdag</h2>
+          <label><span>Veiling</span><select name="auction_id" required></select></label>
+          <div class="split">
+            <label><span>Start</span><input name="starts_at" type="datetime-local" required></label>
+            <label><span>Einde</span><input name="ends_at" type="datetime-local" required></label>
+          </div>
+          <label><span>Notitie</span><textarea name="note" rows="4"></textarea></label>
+          <button type="submit">Kijkdag toevoegen</button>
+        </form>
+      </section>
+
+      <section class="admin-card recent-card">
+        <div class="list-head">
+          <h2>Recente invoer</h2>
+          <button id="refreshButton" type="button">Verversen</button>
+        </div>
+        <div id="adminStatus" class="status-line"></div>
+        <div id="recentList" class="recent-list"></div>
+      </section>
+    </main>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="shared.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
