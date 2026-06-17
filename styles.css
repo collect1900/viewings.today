@@ -128,6 +128,11 @@ h1 {
   max-width: 860px;
 }
 
+.home-title {
+  font-size: clamp(1.32rem, 2.1vw, 2.1rem);
+  line-height: 1.2;
+}
+
 h2 {
   font-size: 1.1rem;
   margin-bottom: 0;
