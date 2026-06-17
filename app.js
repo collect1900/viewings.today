@@ -6,6 +6,9 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 const markers = L.layerGroup().addTo(map);
 const weekInput = document.querySelector("#weekInput");
+const weekLabel = document.querySelector("#weekLabel");
+const prevWeekButton = document.querySelector("#prevWeekButton");
+const nextWeekButton = document.querySelector("#nextWeekButton");
 const houseList = document.querySelector("#houseList");
 const resultCount = document.querySelector("#resultCount");
 const setupNotice = document.querySelector("#setupNotice");
@@ -18,20 +21,22 @@ document.addEventListener("click", (event) => {
 
 wireConfigForm(loadViewingDays);
 setDefaultWeek();
-weekInput.addEventListener("change", loadViewingDays);
+weekInput.addEventListener("change", () => {
+  updateWeekLabel();
+  loadViewingDays();
+});
+prevWeekButton.addEventListener("click", () => moveWeek(-1));
+nextWeekButton.addEventListener("click", () => moveWeek(1));
+updateWeekLabel();
 loadViewingDays();
 
 function setDefaultWeek() {
   const now = new Date();
-  const thursday = new Date(now);
-  thursday.setDate(now.getDate() + 4 - (now.getDay() || 7));
-  const yearStart = new Date(thursday.getFullYear(), 0, 1);
-  const week = Math.ceil((((thursday - yearStart) / 86400000) + 1) / 7);
-  weekInput.value = `${thursday.getFullYear()}-W${String(week).padStart(2, "0")}`;
+  weekInput.value = dateToWeekValue(now);
 }
 
 function getWeekRange(weekValue) {
-  const [year, week] = weekValue.split("-W").map(Number);
+  const { year, week } = parseWeekValue(weekValue) || parseWeekValue(dateToWeekValue(new Date()));
   const simple = new Date(Date.UTC(year, 0, 1 + (week - 1) * 7));
   const day = simple.getUTCDay();
   const monday = simple;
@@ -40,6 +45,42 @@ function getWeekRange(weekValue) {
   const end = new Date(monday);
   end.setUTCDate(monday.getUTCDate() + 7);
   return { start: monday.toISOString(), end: end.toISOString() };
+}
+
+function moveWeek(direction) {
+  const { start } = getWeekRange(weekInput.value);
+  const next = new Date(start);
+  next.setUTCDate(next.getUTCDate() + direction * 7);
+  weekInput.value = dateToWeekValue(next);
+  updateWeekLabel();
+  loadViewingDays();
+}
+
+function updateWeekLabel() {
+  const { start, end } = getWeekRange(weekInput.value);
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  endDate.setUTCDate(endDate.getUTCDate() - 1);
+  const rangeFormat = new Intl.DateTimeFormat("nl-NL", {
+    day: "numeric",
+    month: "short"
+  });
+  weekLabel.textContent = `${weekInput.value} · ${rangeFormat.format(startDate)} t/m ${rangeFormat.format(endDate)}`;
+}
+
+function dateToWeekValue(date) {
+  const current = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const day = current.getUTCDay() || 7;
+  current.setUTCDate(current.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(current.getUTCFullYear(), 0, 1));
+  const week = Math.ceil((((current - yearStart) / 86400000) + 1) / 7);
+  return `${current.getUTCFullYear()}-W${String(week).padStart(2, "0")}`;
+}
+
+function parseWeekValue(value) {
+  const match = String(value || "").match(/^(\d{4})-W(\d{2})$/);
+  if (!match) return null;
+  return { year: Number(match[1]), week: Number(match[2]) };
 }
 
 async function loadViewingDays() {

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Veiling Kijkdagen</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="stylesheet" href="styles.css?v=4">
   </head>
   <body>
     <header class="topbar">
@@ -26,7 +26,12 @@
         </div>
         <label class="week-picker">
           <span>Week</span>
-          <input id="weekInput" type="week">
+          <div class="week-control">
+            <button id="prevWeekButton" class="week-step" type="button" aria-label="Vorige week" title="Vorige week">&#8249;</button>
+            <input id="weekInput" type="week" inputmode="numeric">
+            <button id="nextWeekButton" class="week-step" type="button" aria-label="Volgende week" title="Volgende week">&#8250;</button>
+          </div>
+          <span id="weekLabel" class="week-label"></span>
         </label>
       </section>
 

@@ -143,6 +143,29 @@ label {
   min-width: 210px;
 }
 
+.week-control {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 42px minmax(150px, 1fr) 42px;
+}
+
+.week-step {
+  align-items: center;
+  display: inline-flex;
+  font-size: 1.45rem;
+  height: 42px;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0;
+  width: 42px;
+}
+
+.week-label {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
 label span {
   color: var(--muted);
   font-size: 0.88rem;
@@ -474,14 +497,22 @@ summary {
   }
 
   .split,
-  .viewing-row,
   .house-card-head,
   .auction-title-row,
   .recent-row {
     grid-template-columns: 1fr;
   }
 
-  .viewing-row button {
-    width: 100%;
+  .viewing-row .calendar-button {
+    justify-self: end;
+    width: 28px;
+  }
+
+  .week-picker {
+    min-width: 0;
+  }
+
+  .week-control {
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
   }
 }
