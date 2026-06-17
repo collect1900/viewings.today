@@ -140,13 +140,13 @@ label {
 }
 
 .week-picker {
-  min-width: 210px;
+  min-width: 280px;
 }
 
 .week-control {
   display: grid;
-  gap: 8px;
-  grid-template-columns: 42px minmax(150px, 1fr) 42px;
+  gap: 9px;
+  grid-template-columns: 42px minmax(170px, 1fr) 42px;
 }
 
 .week-step {
@@ -157,13 +157,61 @@ label {
   justify-content: center;
   min-height: 42px;
   padding: 0;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
   width: 42px;
+}
+
+.week-step.is-limit {
+  background: #89aaa0;
+}
+
+.week-display {
+  align-items: center;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--ink);
+  display: grid;
+  font-weight: 900;
+  gap: 8px;
+  grid-template-columns: auto 1fr auto;
+  min-height: 42px;
+  padding: 0 10px;
+}
+
+.week-display:hover {
+  background: white;
+  color: var(--ink);
+}
+
+.week-display-edge {
+  background: #111;
+  display: block;
+  height: 22px;
+  width: 18px;
+}
+
+.week-display #weekRangeText {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+  white-space: nowrap;
 }
 
 .week-label {
   color: var(--muted);
   font-size: 0.86rem;
   font-weight: 800;
+}
+
+.week-error {
+  color: var(--danger);
+  display: block;
+  font-size: 0.86rem;
+  font-weight: 800;
+  min-height: 20px;
 }
 
 label span {
@@ -513,6 +561,16 @@ summary {
   }
 
   .week-control {
-    grid-template-columns: 40px minmax(0, 1fr) 40px;
+    grid-template-columns: 42px minmax(0, 1fr) 42px;
+  }
+
+  .week-display {
+    gap: 6px;
+    padding: 0 8px;
+  }
+
+  .week-display-edge {
+    height: 20px;
+    width: 14px;
   }
 }

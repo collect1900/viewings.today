@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Veiling Kijkdagen</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <link rel="stylesheet" href="styles.css?v=4">
+    <link rel="stylesheet" href="styles.css?v=6">
   </head>
   <body>
     <header class="topbar">
@@ -24,15 +24,21 @@
           <p class="eyebrow">Kijkdagen per week</p>
           <h1>Vind veilinghuizen met kijkdagen in jouw gekozen week</h1>
         </div>
-        <label class="week-picker">
-          <span>Week</span>
+        <div class="week-picker" role="group" aria-labelledby="weekPickerLabel">
+          <span id="weekPickerLabel">Week</span>
           <div class="week-control">
             <button id="prevWeekButton" class="week-step" type="button" aria-label="Vorige week" title="Vorige week">&#8249;</button>
-            <input id="weekInput" type="week" inputmode="numeric">
+            <button id="weekDisplayButton" class="week-display" type="button" aria-live="polite">
+              <span aria-hidden="true" class="week-display-edge"></span>
+              <span id="weekRangeText"></span>
+              <span aria-hidden="true" class="week-display-edge"></span>
+            </button>
+            <input id="weekInput" type="hidden">
             <button id="nextWeekButton" class="week-step" type="button" aria-label="Volgende week" title="Volgende week">&#8250;</button>
           </div>
           <span id="weekLabel" class="week-label"></span>
-        </label>
+          <span id="weekError" class="week-error" role="alert"></span>
+        </div>
       </section>
 
       <section id="setupNotice" class="notice hidden">
@@ -74,7 +80,7 @@
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="shared.js"></script>
-    <script src="app.js"></script>
+    <script src="shared.js?v=2"></script>
+    <script src="app.js?v=3"></script>
   </body>
 </html>

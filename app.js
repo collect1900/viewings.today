@@ -7,6 +7,8 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 const markers = L.layerGroup().addTo(map);
 const weekInput = document.querySelector("#weekInput");
 const weekLabel = document.querySelector("#weekLabel");
+const weekRangeText = document.querySelector("#weekRangeText");
+const weekError = document.querySelector("#weekError");
 const prevWeekButton = document.querySelector("#prevWeekButton");
 const nextWeekButton = document.querySelector("#nextWeekButton");
 const houseList = document.querySelector("#houseList");
@@ -20,19 +22,17 @@ document.addEventListener("click", (event) => {
 });
 
 wireConfigForm(loadViewingDays);
+const currentWeekValue = dateToWeekValue(new Date());
+const minWeekValue = addWeeks(currentWeekValue, -2);
+const maxWeekValue = addWeeks(currentWeekValue, 4);
 setDefaultWeek();
-weekInput.addEventListener("change", () => {
-  updateWeekLabel();
-  loadViewingDays();
-});
-prevWeekButton.addEventListener("click", () => moveWeek(-1));
-nextWeekButton.addEventListener("click", () => moveWeek(1));
+bindWeekStep(prevWeekButton, -1);
+bindWeekStep(nextWeekButton, 1);
 updateWeekLabel();
 loadViewingDays();
 
 function setDefaultWeek() {
-  const now = new Date();
-  weekInput.value = dateToWeekValue(now);
+  weekInput.value = currentWeekValue;
 }
 
 function getWeekRange(weekValue) {
@@ -48,12 +48,36 @@ function getWeekRange(weekValue) {
 }
 
 function moveWeek(direction) {
-  const { start } = getWeekRange(weekInput.value);
-  const next = new Date(start);
-  next.setUTCDate(next.getUTCDate() + direction * 7);
-  weekInput.value = dateToWeekValue(next);
+  const nextWeek = addWeeks(weekInput.value, direction);
+  if (!isWeekWithinBounds(nextWeek)) {
+    showWeekError(direction < 0
+      ? "Je kunt maximaal 2 weken terug kiezen."
+      : "Je kunt maximaal 4 weken vooruit kiezen.");
+    return;
+  }
+
+  weekInput.value = nextWeek;
+  clearWeekError();
   updateWeekLabel();
   loadViewingDays();
+}
+
+function bindWeekStep(button, direction) {
+  let handledTouch = false;
+
+  button.addEventListener("touchend", (event) => {
+    event.preventDefault();
+    handledTouch = true;
+    moveWeek(direction);
+    window.setTimeout(() => {
+      handledTouch = false;
+    }, 500);
+  }, { passive: false });
+
+  button.addEventListener("click", () => {
+    if (handledTouch) return;
+    moveWeek(direction);
+  });
 }
 
 function updateWeekLabel() {
@@ -65,7 +89,11 @@ function updateWeekLabel() {
     day: "numeric",
     month: "short"
   });
-  weekLabel.textContent = `${weekInput.value} · ${rangeFormat.format(startDate)} t/m ${rangeFormat.format(endDate)}`;
+  const rangeText = `${rangeFormat.format(startDate)} t/m ${rangeFormat.format(endDate)}`;
+  weekRangeText.textContent = rangeText;
+  weekLabel.textContent = `${weekInput.value} - ${rangeText}`;
+  prevWeekButton.classList.toggle("is-limit", !isWeekWithinBounds(addWeeks(weekInput.value, -1)));
+  nextWeekButton.classList.toggle("is-limit", !isWeekWithinBounds(addWeeks(weekInput.value, 1)));
 }
 
 function dateToWeekValue(date) {
@@ -81,6 +109,30 @@ function parseWeekValue(value) {
   const match = String(value || "").match(/^(\d{4})-W(\d{2})$/);
   if (!match) return null;
   return { year: Number(match[1]), week: Number(match[2]) };
+}
+
+function addWeeks(weekValue, amount) {
+  const { start } = getWeekRange(weekValue);
+  const next = new Date(start);
+  next.setUTCDate(next.getUTCDate() + amount * 7);
+  return dateToWeekValue(next);
+}
+
+function isWeekWithinBounds(weekValue) {
+  return weekStartTime(weekValue) >= weekStartTime(minWeekValue)
+    && weekStartTime(weekValue) <= weekStartTime(maxWeekValue);
+}
+
+function weekStartTime(weekValue) {
+  return new Date(getWeekRange(weekValue).start).getTime();
+}
+
+function showWeekError(message) {
+  weekError.textContent = message;
+}
+
+function clearWeekError() {
+  weekError.textContent = "";
 }
 
 async function loadViewingDays() {
