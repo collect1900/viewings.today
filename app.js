@@ -248,18 +248,26 @@ function renderAuctionHtml(auction) {
       <h4>${escapeHtml(auction.title)}</h4>
       ${auction.viewingDays.map((day) => `
         <div class="viewing-row">
-          <span>${formatViewingDayRange(day.starts_at, day.ends_at)}</span>
-          <button class="calendar-button" type="button" aria-label="Zet in mijn agenda" title="Zet in mijn agenda" data-ics="${encodeURIComponent(JSON.stringify({
-            title: auction.title,
-            starts_at: day.starts_at,
-            ends_at: day.ends_at,
-            location: "",
-            note: day.note || ""
-          }))}">${calendarIcon()}</button>
+          ${calendarButtonHtml(day, auction, "")}
+          ${viewingTimeHtml(day)}
         </div>
       `).join("")}
     </section>
   `;
+}
+
+function calendarButtonHtml(day, auction, location) {
+  if (isViewingDayPast(day)) {
+    return `<span class="calendar-placeholder" aria-hidden="true"></span>`;
+  }
+
+  return `<button class="calendar-button" type="button" aria-label="Zet in mijn agenda" title="Zet in mijn agenda" data-ics="${encodeURIComponent(JSON.stringify({
+            title: auction.title,
+            starts_at: day.starts_at,
+            ends_at: day.ends_at,
+            location,
+            note: day.note || ""
+          }))}">${calendarIcon()}</button>`;
 }
 
 function renderHouseCard(house) {
@@ -281,25 +289,14 @@ function renderHouseCard(house) {
         </div>
         ${auction.viewingDays.map((day) => `
           <div class="viewing-row">
-            <span>${formatViewingDayRange(day.starts_at, day.ends_at)}</span>
-            <button class="calendar-button" type="button" aria-label="Zet in mijn agenda" title="Zet in mijn agenda">${calendarIcon()}</button>
+            ${calendarButtonHtml(day, auction, [house.address, house.city].filter(Boolean).join(", "))}
+            ${viewingTimeHtml(day)}
           </div>
         `).join("")}
       </section>
     `).join("")}
   `;
 
-  article.querySelectorAll("button").forEach((button, index) => {
-    const days = house.auctions.flatMap((auction) => auction.viewingDays.map((day) => ({ auction, day })));
-    const { auction, day } = days[index];
-    button.addEventListener("click", () => downloadIcs({
-      title: auction.title,
-      starts_at: day.starts_at,
-      ends_at: day.ends_at,
-      location: [house.address, house.city].filter(Boolean).join(", "),
-      note: day.note || ""
-    }));
-  });
   return article;
 }
 
@@ -361,6 +358,42 @@ function calendarIcon() {
 function imageHtml(url, alt, className) {
   if (!url) return "";
   return `<img class="${className}" src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" loading="lazy">`;
+}
+
+function isViewingDayPast(day) {
+  return new Date(day.ends_at).getTime() < Date.now();
+}
+
+function viewingTimeHtml(day) {
+  const start = new Date(day.starts_at);
+  const end = new Date(day.ends_at);
+  const sameDate = start.toDateString() === end.toDateString();
+  const dateFormat = new Intl.DateTimeFormat("nl-NL", {
+    month: "short"
+  });
+  const weekdayFormat = new Intl.DateTimeFormat("nl-NL", { weekday: "short" });
+  const dayFormat = new Intl.DateTimeFormat("nl-NL", { day: "2-digit" });
+  const timeFormat = new Intl.DateTimeFormat("nl-NL", {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
+  if (!sameDate) {
+    return `<span class="viewing-time viewing-time-long">${escapeHtml(formatViewingDayRange(day.starts_at, day.ends_at))}</span>`;
+  }
+
+  return `
+    <span class="viewing-time">
+      <span class="viewing-date">
+        <span class="viewing-weekday">${escapeHtml(weekdayFormat.format(start))}</span>
+        <span class="viewing-day">${escapeHtml(dayFormat.format(start))}</span>
+        <span class="viewing-month">${escapeHtml(dateFormat.format(start))}</span>
+      </span>
+      <span class="viewing-start">${escapeHtml(timeFormat.format(start))}</span>
+      <span class="viewing-separator">-</span>
+      <span class="viewing-end">${escapeHtml(timeFormat.format(end))}</span>
+    </span>
+  `;
 }
 
 function escapeHtml(value) {

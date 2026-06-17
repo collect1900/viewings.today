@@ -411,8 +411,8 @@ summary {
 .viewing-row {
   align-items: center;
   display: grid;
-  gap: 6px;
-  grid-template-columns: 1fr auto;
+  gap: 10px;
+  grid-template-columns: auto 1fr;
   padding: 0;
 }
 
@@ -420,10 +420,43 @@ summary {
   margin-top: 1px;
 }
 
-.viewing-row span {
+.viewing-time {
+  align-items: baseline;
   color: var(--muted);
+  display: grid;
   font-size: 0.9rem;
   font-weight: 700;
+  column-gap: 2px;
+  grid-template-columns: 72px 44px 8px 44px;
+  white-space: nowrap;
+}
+
+.viewing-date {
+  display: grid;
+  gap: 2px;
+  grid-template-columns: 20px 17px 29px;
+}
+
+.viewing-day {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.viewing-time-long {
+  display: block;
+  white-space: normal;
+}
+
+.viewing-start,
+.viewing-end {
+  font-variant-numeric: tabular-nums;
+}
+
+.viewing-start,
+.viewing-separator,
+.viewing-end {
+  color: var(--ink);
 }
 
 .calendar-button {
@@ -433,6 +466,12 @@ summary {
   justify-content: center;
   min-height: 28px;
   padding: 0;
+  width: 28px;
+}
+
+.calendar-placeholder {
+  display: block;
+  height: 28px;
   width: 28px;
 }
 
@@ -563,7 +602,7 @@ summary {
   }
 
   .viewing-row .calendar-button {
-    justify-self: end;
+    justify-self: start;
     width: 28px;
   }
 
