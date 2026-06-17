@@ -148,7 +148,7 @@ h2 {
 .title-image {
   display: block;
   height: auto;
-  max-width: min(220px, 34vw);
+  max-width: min(240px, 34vw);
   object-fit: contain;
 }
 
@@ -590,7 +590,7 @@ summary {
   }
 
   .title-image {
-    max-width: min(190px, 45vw);
+    max-width: min(220px, 45vw);
   }
 
   .content-grid {
@@ -639,7 +639,7 @@ summary {
   }
 
   .title-image {
-    max-width: min(210px, 72vw);
+    max-width: min(230px, 72vw);
   }
 
   .week-control {
