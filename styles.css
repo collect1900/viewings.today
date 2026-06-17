@@ -186,9 +186,6 @@ label {
 }
 
 .week-display #weekRangeText {
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 2px;
   white-space: nowrap;
 }
 
