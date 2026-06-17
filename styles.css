@@ -283,6 +283,34 @@ summary {
   filter: saturate(1.2) contrast(1.04);
 }
 
+.house-map-marker {
+  background: transparent;
+  border: 0;
+}
+
+.house-map-marker span {
+  background: var(--accent);
+  border: 3px solid white;
+  border-radius: 50% 50% 50% 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+  display: block;
+  height: 28px;
+  transform: rotate(-45deg);
+  width: 28px;
+}
+
+.house-map-marker span::after {
+  background: white;
+  border-radius: 50%;
+  content: "";
+  display: block;
+  height: 8px;
+  left: 7px;
+  position: relative;
+  top: 7px;
+  width: 8px;
+}
+
 .list-panel {
   display: flex;
   flex-direction: column;

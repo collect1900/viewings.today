@@ -5,6 +5,13 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(map);
 
 const markers = L.layerGroup().addTo(map);
+const houseMarkerIcon = L.divIcon({
+  className: "house-map-marker",
+  html: "<span></span>",
+  iconSize: [30, 38],
+  iconAnchor: [15, 38],
+  popupAnchor: [0, -36]
+});
 const weekInput = document.querySelector("#weekInput");
 const weekRangeText = document.querySelector("#weekRangeText");
 const weekError = document.querySelector("#weekError");
@@ -211,13 +218,16 @@ function render(houses) {
   const bounds = [];
   for (const house of houses) {
     const popup = renderPopup(house);
-    const marker = L.marker([house.latitude, house.longitude]).bindPopup(popup, { maxWidth: 380 });
+    const marker = L.marker([house.latitude, house.longitude], { icon: houseMarkerIcon }).bindPopup(popup, { maxWidth: 380 });
     marker.addTo(markers);
     bounds.push([house.latitude, house.longitude]);
     houseList.appendChild(renderHouseCard(house));
   }
 
-  if (bounds.length) map.fitBounds(bounds, { padding: [36, 36], maxZoom: 12 });
+  window.setTimeout(() => {
+    map.invalidateSize();
+    if (bounds.length) map.fitBounds(bounds, { padding: [36, 36], maxZoom: 12 });
+  }, 80);
 }
 
 function renderPopup(house) {
