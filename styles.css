@@ -173,10 +173,9 @@ label {
   border: 1px solid var(--line);
   border-radius: 7px;
   color: var(--ink);
-  display: grid;
+  display: inline-flex;
   font-weight: 900;
-  gap: 8px;
-  grid-template-columns: auto 1fr auto;
+  justify-content: center;
   min-height: 42px;
   padding: 0 10px;
 }
@@ -186,24 +185,11 @@ label {
   color: var(--ink);
 }
 
-.week-display-edge {
-  background: #111;
-  display: block;
-  height: 22px;
-  width: 18px;
-}
-
 .week-display #weekRangeText {
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 2px;
   white-space: nowrap;
-}
-
-.week-label {
-  color: var(--muted);
-  font-size: 0.86rem;
-  font-weight: 800;
 }
 
 .week-error {
@@ -565,12 +551,6 @@ summary {
   }
 
   .week-display {
-    gap: 6px;
     padding: 0 8px;
-  }
-
-  .week-display-edge {
-    height: 20px;
-    width: 14px;
   }
 }

@@ -6,7 +6,6 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 const markers = L.layerGroup().addTo(map);
 const weekInput = document.querySelector("#weekInput");
-const weekLabel = document.querySelector("#weekLabel");
 const weekRangeText = document.querySelector("#weekRangeText");
 const weekError = document.querySelector("#weekError");
 const prevWeekButton = document.querySelector("#prevWeekButton");
@@ -91,7 +90,6 @@ function updateWeekLabel() {
   });
   const rangeText = `${rangeFormat.format(startDate)} t/m ${rangeFormat.format(endDate)}`;
   weekRangeText.textContent = rangeText;
-  weekLabel.textContent = `${weekInput.value} - ${rangeText}`;
   prevWeekButton.classList.toggle("is-limit", !isWeekWithinBounds(addWeeks(weekInput.value, -1)));
   nextWeekButton.classList.toggle("is-limit", !isWeekWithinBounds(addWeeks(weekInput.value, 1)));
 }
