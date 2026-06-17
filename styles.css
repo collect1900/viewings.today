@@ -138,6 +138,20 @@ h2 {
   margin-bottom: 0;
 }
 
+.title-block {
+  align-items: center;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: auto minmax(220px, 1fr);
+}
+
+.title-image {
+  display: block;
+  height: auto;
+  max-width: min(220px, 34vw);
+  object-fit: contain;
+}
+
 .week-picker,
 label {
   display: grid;
@@ -575,6 +589,10 @@ summary {
     display: grid;
   }
 
+  .title-image {
+    max-width: min(190px, 45vw);
+  }
+
   .content-grid {
     min-height: 0;
   }
@@ -613,6 +631,15 @@ summary {
 
   .week-picker {
     min-width: 0;
+  }
+
+  .title-block {
+    gap: 12px;
+    grid-template-columns: 1fr;
+  }
+
+  .title-image {
+    max-width: min(210px, 72vw);
   }
 
   .week-control {
