@@ -141,8 +141,8 @@ h2 {
 .title-block {
   align-items: center;
   display: grid;
-  gap: 18px;
-  grid-template-columns: auto minmax(220px, 1fr);
+  gap: 0;
+  grid-template-columns: 1fr;
 }
 
 .title-image {
@@ -150,6 +150,10 @@ h2 {
   height: auto;
   max-width: min(240px, 34vw);
   object-fit: contain;
+}
+
+.title-image-wide {
+  max-width: min(520px, 72vw);
 }
 
 .week-picker,
@@ -593,6 +597,10 @@ summary {
     max-width: min(220px, 45vw);
   }
 
+  .title-image-wide {
+    max-width: min(430px, 78vw);
+  }
+
   .content-grid {
     min-height: 0;
   }
@@ -634,12 +642,15 @@ summary {
   }
 
   .title-block {
-    gap: 12px;
     grid-template-columns: 1fr;
   }
 
   .title-image {
     max-width: min(230px, 72vw);
+  }
+
+  .title-image-wide {
+    max-width: min(360px, 86vw);
   }
 
   .week-control {
