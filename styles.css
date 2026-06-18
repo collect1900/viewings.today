@@ -167,7 +167,9 @@ label {
 }
 
 .week-picker > span:first-child {
+  justify-self: center;
   text-align: center;
+  width: 100%;
 }
 
 .week-control {
