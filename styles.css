@@ -153,7 +153,7 @@ h2 {
 }
 
 .title-image-wide {
-  max-width: min(520px, 72vw);
+  max-width: min(620px, 58vw);
 }
 
 .week-picker,
@@ -164,6 +164,10 @@ label {
 
 .week-picker {
   min-width: 280px;
+}
+
+.week-picker > span:first-child {
+  text-align: center;
 }
 
 .week-control {
@@ -598,7 +602,7 @@ summary {
   }
 
   .title-image-wide {
-    max-width: min(430px, 78vw);
+    max-width: min(560px, 84vw);
   }
 
   .content-grid {
@@ -650,7 +654,7 @@ summary {
   }
 
   .title-image-wide {
-    max-width: min(360px, 86vw);
+    max-width: min(440px, 92vw);
   }
 
   .week-control {
