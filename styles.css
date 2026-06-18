@@ -622,6 +622,20 @@ summary {
 }
 
 @media (max-width: 560px) {
+  .shell {
+    gap: 10px;
+    padding-top: 12px;
+  }
+
+  .control-band {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .title-block {
+    justify-items: center;
+  }
+
   .topbar {
     height: auto;
     min-height: 60px;
@@ -644,7 +658,9 @@ summary {
   }
 
   .week-picker {
+    justify-self: center;
     min-width: 0;
+    width: min(100%, 330px);
   }
 
   .title-block {
@@ -661,6 +677,10 @@ summary {
 
   .week-control {
     grid-template-columns: 42px minmax(0, 1fr) 42px;
+  }
+
+  .week-error {
+    min-height: 0;
   }
 
   .week-display {
