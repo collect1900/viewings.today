@@ -672,7 +672,7 @@ summary {
   }
 
   .title-image-wide {
-    max-width: min(440px, 92vw);
+    max-width: min(300px, 64vw);
   }
 
   .week-control {
