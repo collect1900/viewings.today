@@ -230,7 +230,7 @@ function renderPopup(house) {
   return `
     <div class="popup">
       ${imageHtml(house.image_url, house.name, "popup-image")}
-      <h3>${escapeHtml(house.name)}</h3>
+      <h3>${externalLinkHtml(house.name, house.website, "entity-link")}</h3>
       <p>${escapeHtml([house.address, house.city].filter(Boolean).join(", "))}</p>
       ${house.auctions.map(renderAuctionHtml).join("")}
     </div>
@@ -241,7 +241,7 @@ function renderAuctionHtml(auction) {
   return `
     <section class="popup-auction">
       ${imageHtml(auction.image_url, auction.title, "auction-image")}
-      <h4>${escapeHtml(auction.title)}</h4>
+      <h4>${externalLinkHtml(auction.title, auction.url, "entity-link")}</h4>
       ${auction.viewingDays.map((day) => `
         <div class="viewing-row">
           ${calendarButtonHtml(day, auction, "")}
@@ -273,7 +273,7 @@ function renderHouseCard(house) {
     <div class="house-card-head">
       ${imageHtml(house.image_url, house.name, "house-image")}
       <div>
-        <h3>${escapeHtml(house.name)}</h3>
+        <h3>${externalLinkHtml(house.name, house.website, "entity-link")}</h3>
         <p>${escapeHtml([house.address, house.city].filter(Boolean).join(", "))}</p>
       </div>
     </div>
@@ -281,7 +281,7 @@ function renderHouseCard(house) {
       <section>
         <div class="auction-title-row">
           ${imageHtml(auction.image_url, auction.title, "auction-thumb")}
-          <h4>${escapeHtml(auction.title)}</h4>
+          <h4>${externalLinkHtml(auction.title, auction.url, "entity-link")}</h4>
         </div>
         ${auction.viewingDays.map((day) => `
           <div class="viewing-row">
@@ -354,6 +354,26 @@ function calendarIcon() {
 function imageHtml(url, alt, className) {
   if (!url) return "";
   return `<img class="${className}" src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" loading="lazy">`;
+}
+
+function externalLinkHtml(label, url, className) {
+  const href = normalizeExternalUrl(url);
+  if (!href) return escapeHtml(label);
+  return `<a class="${className}" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`;
+}
+
+function normalizeExternalUrl(url) {
+  const value = String(url || "").trim();
+  if (!value) return "";
+  const withProtocol = /^[a-z][a-z0-9+.-]*:/i.test(value) ? value : `https://${value}`;
+
+  try {
+    const parsed = new URL(withProtocol);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return "";
+    return parsed.href;
+  } catch {
+    return "";
+  }
 }
 
 function isViewingDayPast(day) {

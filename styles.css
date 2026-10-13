@@ -437,6 +437,15 @@ summary {
   margin-bottom: 0;
 }
 
+.entity-link {
+  color: var(--accent-dark);
+  text-decoration: none;
+}
+
+.entity-link:hover {
+  text-decoration: underline;
+}
+
 .viewing-row {
   align-items: center;
   display: grid;
