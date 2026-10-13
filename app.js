@@ -29,7 +29,6 @@ document.addEventListener("click", (event) => {
 
 wireConfigForm(loadViewingDays);
 const currentWeekValue = dateToWeekValue(new Date());
-const minWeekValue = addWeeks(currentWeekValue, -2);
 const maxWeekValue = addWeeks(currentWeekValue, 4);
 setDefaultWeek();
 bindWeekStep(prevWeekButton, -1);
@@ -56,9 +55,7 @@ function getWeekRange(weekValue) {
 function moveWeek(direction) {
   const nextWeek = addWeeks(weekInput.value, direction);
   if (!isWeekWithinBounds(nextWeek)) {
-    showWeekError(direction < 0
-      ? "Je kunt maximaal 2 weken terug kiezen."
-      : "Je kunt maximaal 4 weken vooruit kiezen.");
+    showWeekError("Je kunt maximaal 4 weken vooruit kiezen.");
     return;
   }
 
@@ -97,7 +94,7 @@ function updateWeekLabel() {
   });
   const rangeText = `${rangeFormat.format(startDate)} t/m ${rangeFormat.format(endDate)}`;
   weekRangeText.textContent = rangeText;
-  prevWeekButton.classList.toggle("is-limit", !isWeekWithinBounds(addWeeks(weekInput.value, -1)));
+  prevWeekButton.classList.remove("is-limit");
   nextWeekButton.classList.toggle("is-limit", !isWeekWithinBounds(addWeeks(weekInput.value, 1)));
 }
 
@@ -124,8 +121,7 @@ function addWeeks(weekValue, amount) {
 }
 
 function isWeekWithinBounds(weekValue) {
-  return weekStartTime(weekValue) >= weekStartTime(minWeekValue)
-    && weekStartTime(weekValue) <= weekStartTime(maxWeekValue);
+  return weekStartTime(weekValue) <= weekStartTime(maxWeekValue);
 }
 
 function weekStartTime(weekValue) {
