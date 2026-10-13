@@ -434,6 +434,8 @@ summary {
 
 .house-card h4,
 .popup h4 {
+  font-size: 1.05rem;
+  line-height: 1.2;
   margin-bottom: 0;
 }
 

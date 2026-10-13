@@ -62,7 +62,7 @@ async function refreshAdmin() {
   const [{ data: houses }, { data: auctions }, { data: days, error }] = await Promise.all([
     client.from("auction_houses").select("*").order("name"),
     client.from("auctions").select("*, auction_houses(name)").order("created_at", { ascending: false }),
-    client.from("viewing_days").select("*, auctions(title, image_url, auction_houses(name, image_url))").order("starts_at", { ascending: false }).limit(12)
+    client.from("viewing_days").select("*, auctions(title, image_url, auction_houses(name, image_url, postal_code, city))").order("starts_at", { ascending: false }).limit(12)
   ]);
 
   if (error) showStatus(error.message, true);
@@ -89,7 +89,7 @@ function renderRecent(days) {
         ${imageHtml(day.auctions?.image_url || day.auctions?.auction_houses?.image_url, day.auctions?.title || "Veiling", "recent-thumb")}
         <div>
           <strong>${escapeHtml(day.auctions?.title || "Veiling")}</strong>
-          <span>${escapeHtml(day.auctions?.auction_houses?.name || "")}</span>
+          <span>${escapeHtml(formatRecentHouse(day.auctions?.auction_houses))}</span>
           <span>${formatViewingDayRange(day.starts_at, day.ends_at)}</span>
         </div>
       </div>
@@ -106,6 +106,12 @@ function showStatus(message, isError = false) {
 function imageHtml(url, alt, className) {
   if (!url) return "";
   return `<img class="${className}" src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" loading="lazy">`;
+}
+
+function formatRecentHouse(house) {
+  if (!house) return "";
+  const place = [house.postal_code, house.city].filter(Boolean).join(" ");
+  return [house.name, place].filter(Boolean).join(" - ");
 }
 
 function escapeHtml(value) {

@@ -4,6 +4,7 @@ create table if not exists public.auction_houses (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   address text,
+  postal_code text,
   city text not null,
   website text,
   image_url text,
@@ -73,8 +74,8 @@ on public.viewing_days for insert
 to anon
 with check (true);
 
-insert into public.auction_houses (name, address, city, website, latitude, longitude)
+insert into public.auction_houses (name, address, postal_code, city, website, latitude, longitude)
 values
-  ('Venduehuis Den Haag', 'Nobelstraat 5', 'Den Haag', 'https://venduehuis.com', 52.0809, 4.3075),
-  ('AAG Auctioneers', 'Lekstraat 63', 'Amsterdam', 'https://aagauctioneers.com', 52.3425, 4.9082)
+  ('Venduehuis Den Haag', 'Nobelstraat 5', '2513 BC', 'Den Haag', 'https://venduehuis.com', 52.0809, 4.3075),
+  ('AAG Auctioneers', 'Lekstraat 63', '1079 EM', 'Amsterdam', 'https://aagauctioneers.com', 52.3425, 4.9082)
 on conflict do nothing;

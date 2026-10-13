@@ -161,6 +161,7 @@ async function loadViewingDays() {
           id,
           name,
           address,
+          postal_code,
           city,
           website,
           image_url,
@@ -231,7 +232,7 @@ function renderPopup(house) {
     <div class="popup">
       ${imageHtml(house.image_url, house.name, "popup-image")}
       <h3>${externalLinkHtml(house.name, house.website, "entity-link")}</h3>
-      <p>${escapeHtml([house.address, house.city].filter(Boolean).join(", "))}</p>
+      <p>${escapeHtml(formatHouseAddress(house))}</p>
       ${house.auctions.map(renderAuctionHtml).join("")}
     </div>
   `;
@@ -274,7 +275,7 @@ function renderHouseCard(house) {
       ${imageHtml(house.image_url, house.name, "house-image")}
       <div>
         <h3>${externalLinkHtml(house.name, house.website, "entity-link")}</h3>
-        <p>${escapeHtml([house.address, house.city].filter(Boolean).join(", "))}</p>
+        <p>${escapeHtml(formatHouseAddress(house))}</p>
       </div>
     </div>
     ${house.auctions.map((auction) => `
@@ -285,7 +286,7 @@ function renderHouseCard(house) {
         </div>
         ${auction.viewingDays.map((day) => `
           <div class="viewing-row">
-            ${calendarButtonHtml(day, auction, [house.address, house.city].filter(Boolean).join(", "))}
+            ${calendarButtonHtml(day, auction, formatHouseAddress(house))}
             ${viewingTimeHtml(day)}
           </div>
         `).join("")}
@@ -354,6 +355,11 @@ function calendarIcon() {
 function imageHtml(url, alt, className) {
   if (!url) return "";
   return `<img class="${className}" src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" loading="lazy">`;
+}
+
+function formatHouseAddress(house) {
+  const cityLine = [house.postal_code, house.city].filter(Boolean).join(" ");
+  return [house.address, cityLine].filter(Boolean).join(", ");
 }
 
 function externalLinkHtml(label, url, className) {
