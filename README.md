@@ -35,3 +35,7 @@ Heb je het schema al eerder uitgevoerd, draai dan eenmalig
 
 Heb je later het postcodeveld toegevoegd, draai dan eenmalig
 `add-postal-code-field.sql` in Supabase.
+
+## Tijdafspraak MS Access
+
+De datum/tijdvelden bevatten Nederlandse kloktijden in UTC-velden: 11:00+00:00 betekent in deze dataset 11:00 Nederlandse tijd. De website toont deze kloktijd ongewijzigd, ook op apparaten met een andere tijdzone. Admininvoer gebruikt dezelfde afspraak. Agenda-downloads zetten de kloktijd om naar een werkelijk UTC-tijdstip met Europe/Amsterdam (zomer- en wintertijd). Deze afspraak geldt voor alle kijkdagen; meng geen echte UTC-tijdstippen met deze Access-invoer.

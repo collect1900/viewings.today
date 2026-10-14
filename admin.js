@@ -36,7 +36,7 @@ function formPayload(form, numericFields = []) {
   const payload = Object.fromEntries(new FormData(form).entries());
   for (const key of Object.keys(payload)) {
     if (payload[key] === "") payload[key] = null;
-    if (payload[key] && key.endsWith("_at")) payload[key] = new Date(payload[key]).toISOString();
+    if (payload[key] && key.endsWith("_at")) payload[key] = new Date(`${payload[key]}Z`).toISOString();
     if (numericFields.includes(key)) payload[key] = Number(payload[key]);
   }
   return payload;

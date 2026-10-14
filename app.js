@@ -91,7 +91,7 @@ function updateWeekLabel() {
   const startDate = new Date(start);
   const endDate = new Date(end);
   endDate.setUTCDate(endDate.getUTCDate() - 1);
-  const rangeFormat = new Intl.DateTimeFormat("nl-NL", {
+  const rangeFormat = new Intl.DateTimeFormat("nl-NL", { timeZone: "UTC",
     day: "numeric",
     month: "short"
   });
@@ -311,8 +311,8 @@ function downloadIcs(event) {
     "BEGIN:VEVENT",
     `UID:${uid}@veiling-kijkdagen`,
     `DTSTAMP:${icsDate(new Date())}`,
-    `DTSTART:${icsDate(new Date(event.starts_at))}`,
-    `DTEND:${icsDate(new Date(event.ends_at))}`,
+    `DTSTART:${icsDate(viewingInstant(event.starts_at))}`,
+    `DTEND:${icsDate(viewingInstant(event.ends_at))}`,
     `SUMMARY:${icsEscape(title)}`,
     `LOCATION:${icsEscape(event.location || "")}`,
     `DESCRIPTION:${icsEscape(event.note || title)}`,
@@ -387,19 +387,19 @@ function normalizeExternalUrl(url) {
 }
 
 function isViewingDayPast(day) {
-  return new Date(day.ends_at).getTime() < Date.now();
+  return viewingInstant(day.ends_at).getTime() < Date.now();
 }
 
 function viewingTimeHtml(day) {
   const start = new Date(day.starts_at);
   const end = new Date(day.ends_at);
-  const sameDate = start.toDateString() === end.toDateString();
-  const dateFormat = new Intl.DateTimeFormat("nl-NL", {
+  const sameDate = start.toISOString().slice(0, 10) === end.toISOString().slice(0, 10);
+  const dateFormat = new Intl.DateTimeFormat("nl-NL", { timeZone: "UTC",
     month: "short"
   });
-  const weekdayFormat = new Intl.DateTimeFormat("nl-NL", { weekday: "short" });
-  const dayFormat = new Intl.DateTimeFormat("nl-NL", { day: "2-digit" });
-  const timeFormat = new Intl.DateTimeFormat("nl-NL", {
+  const weekdayFormat = new Intl.DateTimeFormat("nl-NL", { timeZone: "UTC", weekday: "short" });
+  const dayFormat = new Intl.DateTimeFormat("nl-NL", { timeZone: "UTC", day: "2-digit" });
+  const timeFormat = new Intl.DateTimeFormat("nl-NL", { timeZone: "UTC",
     hour: "2-digit",
     minute: "2-digit"
   });

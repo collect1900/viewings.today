@@ -53,6 +53,7 @@ function wireConfigForm(onSaved) {
 
 function formatDateTime(value) {
   return new Intl.DateTimeFormat("nl-NL", {
+    timeZone: "UTC",
     weekday: "short",
     day: "numeric",
     month: "short",
@@ -64,13 +65,15 @@ function formatDateTime(value) {
 function formatViewingDayRange(startValue, endValue) {
   const start = new Date(startValue);
   const end = new Date(endValue);
-  const sameDate = start.toDateString() === end.toDateString();
+  const sameDate = start.toISOString().slice(0, 10) === end.toISOString().slice(0, 10);
   const datePart = new Intl.DateTimeFormat("nl-NL", {
+    timeZone: "UTC",
     weekday: "short",
     day: "numeric",
     month: "short"
   }).format(start);
   const timeFormat = new Intl.DateTimeFormat("nl-NL", {
+    timeZone: "UTC",
     hour: "2-digit",
     minute: "2-digit"
   });
@@ -84,7 +87,27 @@ function formatViewingDayRange(startValue, endValue) {
 
 function toLocalInputValue(date) {
   if (!date) return "";
-  const d = new Date(date);
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().slice(0, 16);
+  return new Date(date).toISOString().slice(0, 16);
+}
+
+// Access stores Dutch wall-clock times in the UTC fields of the database.
+// Display those fields unchanged; convert to a real instant only for calendars
+// and comparisons with the current time. Amsterdam supplies the DST rules.
+function viewingInstant(value) {
+  const wallTime = new Date(value).getTime();
+  const formatter = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/Amsterdam", year: "numeric", month: "2-digit",
+    day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit",
+    hourCycle: "h23"
+  });
+  let instant = wallTime;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const parts = Object.fromEntries(formatter.formatToParts(new Date(instant))
+      .filter((part) => part.type !== "literal").map((part) => [part.type, Number(part.value)]));
+    const shown = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
+    const correction = wallTime - shown;
+    if (!correction) break;
+    instant += correction;
+  }
+  return new Date(instant);
 }
