@@ -98,6 +98,16 @@ function updateWeekLabel() {
   });
   const rangeText = `${rangeFormat.format(startDate)} t/m ${rangeFormat.format(endDate)}`;
   weekRangeText.textContent = rangeText;
+  const weekOffset = Math.round((weekStartTime(weekInput.value) - weekStartTime(currentWeekValue)) / 604800000);
+  const weekColors = {
+    "-2": "#F09B59",
+    "-1": "#F0C189",
+    "1": "#D6FFD0",
+    "2": "#C7EDC1",
+    "3": "#B4D6AF",
+    "4": "#A1BF9C"
+  };
+  document.querySelector("#weekDisplayButton").style.backgroundColor = weekColors[weekOffset] || "";
   prevWeekButton.classList.toggle("is-limit", !isWeekWithinBounds(addWeeks(weekInput.value, -1)));
   nextWeekButton.classList.toggle("is-limit", !isWeekWithinBounds(addWeeks(weekInput.value, 1)));
 }
