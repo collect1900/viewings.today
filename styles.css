@@ -467,14 +467,14 @@ summary {
   font-size: 0.9rem;
   font-weight: 700;
   column-gap: 2px;
-  grid-template-columns: 72px 44px 8px 44px;
+  grid-template-columns: 80px 44px 8px 44px;
   white-space: nowrap;
 }
 
 .viewing-date {
   display: grid;
-  gap: 2px;
-  grid-template-columns: 20px 17px 29px;
+  gap: 5px;
+  grid-template-columns: 24px 17px 29px;
 }
 
 .viewing-day {
